@@ -1,2 +1,2 @@
 # knnimpute
-Multiple pure Python implementations of kNN imputation
+Multiple implementations of kNN imputation in pure Python + NumPy
