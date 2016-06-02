@@ -64,6 +64,7 @@ if __name__ == '__main__':
             'Intended Audience :: Science/Research',
             'License :: OSI Approved :: Apache Software License',
             'Programming Language :: Python',
+            'Topic :: Scientific/Engineering :: Mathematics'
         ],
         install_requires=[
             'six',
