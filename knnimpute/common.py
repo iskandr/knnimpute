@@ -34,10 +34,10 @@ def knn_initialize(X,
         # to put NaN's back in the data matrix for the distances function
         X_row_major[missing_mask] = np.nan
     D = all_pairs_normalized_distances(X_row_major, verbose=verbose)
-    # set diagonal of distance matrix to infinity since we don't want
+    # set diagonal of distance matrix to a large value since we don't want
     # points considering themselves as neighbors
     max_dist = 1e6 * np.maximum(1, D.max())
     np.fill_diagonal(D, max_dist)
-    D[D < min_dist] = min_dist
-    D[D > max_dist] = max_dist
+    D[D < min_dist] = min_dist # prevents 0s
+    D[D > max_dist] = max_dist # prevents infinities
     return X_row_major, D
