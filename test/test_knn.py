@@ -36,6 +36,6 @@ def test_knn_optimistic_few_observed():
 
 def test_knn_minimal():
     X = np.array([[1, 1, np.NaN], [1, 1, 1]])
-    res = knnimpute.knn_impute_few_observed(X, np.isnan(X), k=1)
+    res = knn_impute_few_observed(X, np.isnan(X), k=1)
     assert np.isnan(res).any() == False, \
         "Basic example did not get imputed: %s" % res

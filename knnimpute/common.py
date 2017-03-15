@@ -36,7 +36,7 @@ def knn_initialize(X,
     D = all_pairs_normalized_distances(X_row_major, verbose=verbose)
     # set diagonal of distance matrix to a large value since we don't want
     # points considering themselves as neighbors
-    max_dist = 1e6 * np.maximum(1, D.max())
+    max_dist = 1e6 * np.maximum(1, D[np.isfinite(D)].max())
     np.fill_diagonal(D, max_dist)
     D[D < min_dist] = min_dist # prevents 0s
     D[D > max_dist] = max_dist # prevents infinities

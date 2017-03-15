@@ -28,11 +28,7 @@ def knn_impute_reference(
     """
     n_rows, n_cols = X.shape
     X_result, D = knn_initialize(X, missing_mask, verbose=verbose)
-
-    # get rid of infinities, replace them with a very large number
-    finite_distance_distance_mask = np.isfinite(D)
-    effective_infinity = 10 ** 6 * D[finite_distance_distance_mask].max()
-    D[~finite_distance_distance_mask] = effective_infinity
+    effective_infinity = D[0, 0] # since diagonal was replaced by max_dist
 
     for i in range(n_rows):
         for j in np.where(missing_mask[i, :])[0]:
