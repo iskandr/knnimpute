@@ -19,7 +19,11 @@ import numpy as np
 from .normalized_distance import all_pairs_normalized_distances
 
 
-def knn_initialize(X, missing_mask, verbose=False):
+def knn_initialize(X, 
+                   missing_mask, 
+                   verbose=False, 
+                   min_dist=1e-6, 
+                   max_dist_multiplier=1e6):
     """
     Fill X with NaN values if necessary, construct the n_samples x n_samples
     distance matrix and set the self-distance of each row to infinity.
@@ -30,7 +34,14 @@ def knn_initialize(X, missing_mask, verbose=False):
         # to put NaN's back in the data matrix for the distances function
         X_row_major[missing_mask] = np.nan
     D = all_pairs_normalized_distances(X_row_major, verbose=verbose)
-    # set diagonal of distance matrix to infinity since we don't want
+    # set diagonal of distance matrix to a large value since we don't want
     # points considering themselves as neighbors
-    np.fill_diagonal(D, np.inf)
+    D_finite_flat = D[np.isfinite(D)]
+    if len(D_finite_flat) > 0:
+        max_dist = max_dist_multiplier * np.maximum(1, D_finite_flat.max())
+    else:
+        max_dist = max_dist_multiplier
+    np.fill_diagonal(D, max_dist)
+    D[D < min_dist] = min_dist # prevents 0s
+    D[D > max_dist] = max_dist # prevents infinities
     return X_row_major, D

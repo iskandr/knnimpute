@@ -49,11 +49,9 @@ def knn_impute_few_observed(
     X_column_major = X.copy(order="F")
     X_row_major, D = knn_initialize(X, missing_mask, verbose=verbose)
     # get rid of infinities, replace them with a very large number
-    finite_distance_distance_mask = np.isfinite(D)
-    effective_infinity = 10 ** 6 * D[finite_distance_distance_mask].max()
-    D[~finite_distance_distance_mask] = effective_infinity
     D_sorted = np.argsort(D, axis=1)
     inv_D = 1.0 / D
+    effective_infinity = D[0, 0] # since diagonal was replaced by max_dist
     D_valid_mask = D < effective_infinity
     valid_distances_per_row = D_valid_mask.sum(axis=1)
 

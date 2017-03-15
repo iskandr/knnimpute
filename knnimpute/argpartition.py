@@ -53,7 +53,6 @@ def knn_impute_with_argpartition(
     # one column at a time
     missing_mask_column_major = np.asarray(missing_mask, order="F")
     X_row_major, D = knn_initialize(X, missing_mask, verbose=verbose)
-    # D[~np.isfinite(D)] = very_large_value
     D_reciprocal = 1.0 / D
     neighbor_weights = np.zeros(k, dtype="float32")
     dot = np.dot
