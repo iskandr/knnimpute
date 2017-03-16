@@ -47,11 +47,11 @@ def knn_impute_few_observed(
     missing_mask_column_major = np.asarray(missing_mask, order="F")
     observed_mask_column_major = ~missing_mask_column_major
     X_column_major = X.copy(order="F")
-    X_row_major, D = knn_initialize(X, missing_mask, verbose=verbose)
+    X_row_major, D, effective_infinity = \
+        knn_initialize(X, missing_mask, verbose=verbose)
     # get rid of infinities, replace them with a very large number
     D_sorted = np.argsort(D, axis=1)
     inv_D = 1.0 / D
-    effective_infinity = D[0, 0] # since diagonal was replaced by max_dist
     D_valid_mask = D < effective_infinity
     valid_distances_per_row = D_valid_mask.sum(axis=1)
 
@@ -67,15 +67,13 @@ def knn_impute_few_observed(
         missing_row = missing_mask[i, :]
         missing_indices = np.where(missing_row)[0]
         row_weights = inv_D[i, :]
-        # row_sorted_indices = D_sorted_indices[i]
         if verbose and i % print_interval == 0:
             print(
-                "Imputing row %d/%d with %d missing columns, elapsed time: %0.3f" % (
+                "Imputing row %d/%d with %d missing, elapsed time: %0.3f" % (
                     i + 1,
                     n_rows,
                     len(missing_indices),
                     time.time() - start_t))
-        # row_neighbor_indices = neighbor_indices[i]
         candidate_neighbor_indices = D_sorted[i]
 
         for j in missing_indices:

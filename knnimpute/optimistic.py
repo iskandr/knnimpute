@@ -50,7 +50,7 @@ def knn_impute_optimistic(
     """
     start_t = time.time()
     n_rows, n_cols = X.shape
-    X_row_major, D = knn_initialize(X, missing_mask, verbose=verbose)
+    X_row_major, D, _ = knn_initialize(X, missing_mask, verbose=verbose)
     D_sorted_indices = np.argsort(D, axis=1)
     X_column_major = X_row_major.copy(order="F")
 
@@ -66,7 +66,7 @@ def knn_impute_optimistic(
         missing_columns = np.where(missing_mask[i])[0]
         if verbose and i % print_interval == 0:
             print(
-                "[DenseKNN] Imputing row %d/%d with %d missing columns, elapsed time: %0.3f" % (
+                "Imputing row %d/%d with %d missing, elapsed time: %0.3f" % (
                     i + 1,
                     n_rows,
                     len(missing_columns),

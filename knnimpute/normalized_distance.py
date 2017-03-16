@@ -12,6 +12,7 @@
 
 from __future__ import absolute_import, print_function, division
 import time
+import logging
 
 from six.moves import range
 import numpy as np
@@ -36,9 +37,7 @@ def all_pairs_normalized_distances(X, verbose=False):
     """
     n_rows, n_cols = X.shape
     t_start = time.time()
-    if verbose:
-        print("Computing pairwise distances between %d samples" % (
-            n_rows))
+
     # matrix of mean squared difference between between samples
     D = np.ones((n_rows, n_rows), dtype="float32", order="C") * np.inf
 
@@ -68,8 +67,8 @@ def all_pairs_normalized_distances(X, verbose=False):
                 time.time() - t_start))
 
         if row_overlaps_no_other_rows[i]:
-            print("No samples have sufficient overlap with sample %d" % (
-                i,))
+            logging.warn(
+                "No other samples have sufficient overlap with sample %d", i)
             continue
         x = X[i, :]
         np.subtract(X, x.reshape((1, n_cols)), out=diffs)

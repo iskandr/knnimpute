@@ -9,7 +9,7 @@ from knnimpute import (
 )
 from low_rank_data import XY_incomplete, missing_mask
 
-def _knn_implementation(impute_fn):
+def _use_knn_implementation_on_low_rank_data(impute_fn):
     X_filled_reference = knn_impute_reference(XY_incomplete.copy(), missing_mask, k=3)
     X_filled_other = impute_fn(XY_incomplete.copy(), missing_mask, k=3)
     eq_(X_filled_reference.shape, X_filled_other.shape)
@@ -23,19 +23,9 @@ def _knn_implementation(impute_fn):
             X_filled_other[0]
         )
 
-def test_knn_argpartition_same_as_reference():
-    _knn_implementation(knn_impute_with_argpartition)
-
-
-def test_knn_optimistic_same_as_reference():
-    _knn_implementation(knn_impute_optimistic)
-
-
-def test_knn_optimistic_few_observed():
-    _knn_implementation(knn_impute_few_observed)
-
-def test_knn_minimal():
-    X = np.array([[1, 1, np.NaN], [1, 1, 1]])
-    res = knn_impute_few_observed(X, np.isnan(X), k=1)
-    assert np.isnan(res).any() == False, \
-        "Basic example did not get imputed: %s" % res
+def test_knn_same_as_reference():
+    for fn in (
+            knn_impute_with_argpartition,
+            knn_impute_optimistic,
+            knn_impute_few_observed):
+        _use_knn_implementation_on_low_rank_data(fn)

@@ -8,7 +8,7 @@ from .common import knn_initialize
 from .few_observed_entries import knn_impute_few_observed
 from .argpartition import knn_impute_with_argpartition
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 __all__ = [
     "all_pairs_normalized_distances",

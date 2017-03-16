@@ -52,7 +52,8 @@ def knn_impute_with_argpartition(
     # put the missing mask in column major order since it's accessed
     # one column at a time
     missing_mask_column_major = np.asarray(missing_mask, order="F")
-    X_row_major, D = knn_initialize(X, missing_mask, verbose=verbose)
+    X_row_major, D, effective_infinity = \
+        knn_initialize(X, missing_mask, verbose=verbose)
     D_reciprocal = 1.0 / D
     neighbor_weights = np.zeros(k, dtype="float32")
     dot = np.dot
@@ -61,7 +62,7 @@ def knn_impute_with_argpartition(
 
         if verbose and i % print_interval == 0:
             print(
-                "Imputing row %d/%d with %d missing columns, elapsed time: %0.3f" % (
+                "Imputing row %d/%d with %d missing, elapsed time: %0.3f" % (
                     i + 1,
                     n_rows,
                     len(missing_indices),
@@ -72,8 +73,7 @@ def knn_impute_with_argpartition(
             column = X[:, j]
             rows_missing_feature = missing_mask_column_major[:, j]
             d_copy = d.copy()
-            # d_copy[rows_missing_feature] = very_large_value
-            d_copy[rows_missing_feature] = np.inf
+            d_copy[rows_missing_feature] = effective_infinity
             neighbor_indices = np.argpartition(d_copy, k)[:k]
             if len(neighbor_indices) > 0:
                 neighbor_weights = inv_d[neighbor_indices]
