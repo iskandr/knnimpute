@@ -39,7 +39,7 @@ def test_normalized_distance_same_results_as_reference_implementation():
 
 def test_normalized_distance_faster_than_reference_implementation():
     start_t = time()
-    all_pairs_normalized_distances(XY_incomplete, verbose=False)
+    all_pairs_normalized_distances(XY_incomplete)
     fast_t = time() - start_t
     start_t = time()
     all_pairs_normalized_distances_reference(XY_incomplete)

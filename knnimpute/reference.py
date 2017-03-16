@@ -27,8 +27,8 @@ def knn_impute_reference(
     Reference implementation of kNN imputation logic.
     """
     n_rows, n_cols = X.shape
-    X_result, D = knn_initialize(X, missing_mask, verbose=verbose)
-    effective_infinity = D[0, 0] # since diagonal was replaced by max_dist
+    X_result, D, effective_infinity = \
+        knn_initialize(X, missing_mask, verbose=verbose)
 
     for i in range(n_rows):
         for j in np.where(missing_mask[i, :])[0]:
