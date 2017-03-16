@@ -51,10 +51,10 @@ if not version:
 if __name__ == '__main__':
     setup(
         name='knnimpute',
-        version="0.0.1",
+        version=version,
         description="k-Nearest Neighbor imputation",
         author="Alex Rubinsteyn",
-        author_email="alex {dot} rubinsteyn {at} gmail {dot} com",
+        author_email="alex.rubinsteyn@gmail.com",
         url="https://github.com/hammerlab/knnimpute",
         license="http://www.apache.org/licenses/LICENSE-2.0.html",
         classifiers=[
