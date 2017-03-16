@@ -55,7 +55,6 @@ def knn_impute_with_argpartition(
     missing_mask_column_major = np.asarray(missing_mask, order="F")
     X_row_major, D, effective_infinity = \
         knn_initialize(X, missing_mask, verbose=verbose)
-    print(effective_infinity)
     D_reciprocal = 1.0 / D
 
     dot = np.dot
@@ -75,28 +74,25 @@ def knn_impute_with_argpartition(
         d = D[i, :]
         inv_d = D_reciprocal[i, :]
         for j in missing_indices:
-            column = X[:, j]
-            rows_missing_feature = missing_mask_column_major[:, j]
             # move rows which lack this feature to be infinitely far away
             d_copy = d.copy()
-            d_copy[rows_missing_feature] = effective_infinity
+            d_copy[missing_mask_column_major[:, j]] = effective_infinity
 
-            neighbor_indices = argpartition(d_copy, k)
-
-            if d[neighbor_indices].max() > effective_infinity:
+            neighbor_indices = argpartition(d_copy, k)[:k]
+            if d_copy[neighbor_indices].max() >= effective_infinity:
                 # if there aren't k rows with the feature of interest then
                 # we need to filter out indices of points at infinite distance
                 neighbor_indices = array([
                     neighbor_index
                     for neighbor_index in neighbor_indices
-                    if d[neighbor_index] < effective_infinity
+                    if d_copy[neighbor_index] < effective_infinity
                 ])
-
             n_current_neighbors = len(neighbor_indices)
+
             if n_current_neighbors > 0:
                 neighbor_weights = inv_d[neighbor_indices]
                 X_row_major[i, j] = (
-                    dot(column[neighbor_indices], neighbor_weights) /
+                    dot(X[:, j][neighbor_indices], neighbor_weights) /
                     neighbor_weights.sum()
                 )
     return X_row_major

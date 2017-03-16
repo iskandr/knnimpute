@@ -61,6 +61,7 @@ def all_pairs_normalized_distances(X):
         x = X[i, :]
         np.subtract(X, x.reshape((1, n_cols)), out=diffs)
         np.isnan(diffs, out=missing_differences)
+
         # zero out all NaN's
         diffs[missing_differences] = 0
 
