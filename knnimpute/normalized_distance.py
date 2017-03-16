@@ -11,14 +11,11 @@
 # limitations under the License.
 
 from __future__ import absolute_import, print_function, division
-import time
-import logging
 
 from six.moves import range
 import numpy as np
 
-
-def all_pairs_normalized_distances(X, verbose=False):
+def all_pairs_normalized_distances(X):
     """
     We can't really compute distances over incomplete data since
     rows are missing different numbers of entries.
@@ -36,7 +33,6 @@ def all_pairs_normalized_distances(X, verbose=False):
     Returns a (n_samples, n_samples) matrix of pairwise normalized distances.
     """
     n_rows, n_cols = X.shape
-    t_start = time.time()
 
     # matrix of mean squared difference between between samples
     D = np.ones((n_rows, n_rows), dtype="float32", order="C") * np.inf
@@ -51,6 +47,8 @@ def all_pairs_normalized_distances(X, verbose=False):
     number_incomparable_rows = no_overlapping_features_rows.sum(axis=1)
     row_overlaps_every_other_row = (number_incomparable_rows == 0)
     row_overlaps_no_other_rows = number_incomparable_rows == n_rows
+    valid_rows_mask = ~row_overlaps_no_other_rows
+    valid_row_indices = np.where(valid_rows_mask)[0]
 
     # preallocate all the arrays that we would otherwise create in the
     # following loop and pass them as "out" parameters to NumPy ufuncs
@@ -59,17 +57,7 @@ def all_pairs_normalized_distances(X, verbose=False):
     valid_rows = np.zeros(n_rows, dtype=bool)
     ssd = np.zeros(n_rows, dtype=X.dtype)
 
-    for i in range(n_rows):
-        if verbose and i % 100 == 0:
-            print("Computing distances for sample #%d/%d, elapsed time: %0.3f" % (
-                i + 1,
-                n_rows,
-                time.time() - t_start))
-
-        if row_overlaps_no_other_rows[i]:
-            logging.warn(
-                "No other samples have sufficient overlap with sample %d", i)
-            continue
+    for i in valid_row_indices:
         x = X[i, :]
         np.subtract(X, x.reshape((1, n_cols)), out=diffs)
         np.isnan(diffs, out=missing_differences)

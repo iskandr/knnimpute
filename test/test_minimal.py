@@ -20,4 +20,4 @@ def test_knn_minimal():
             knn_impute_with_argpartition,
             knn_impute_optimistic,
             knn_impute_reference):
-        _run_knn_with_two_rows(fn)
+        yield _run_knn_with_two_rows, fn

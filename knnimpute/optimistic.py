@@ -22,7 +22,8 @@ def knn_impute_optimistic(
         X,
         missing_mask,
         k,
-        verbose=False, print_interval=100):
+        verbose=False,
+        print_interval=100):
     """
     Fill in the given incomplete matrix using k-nearest neighbor imputation.
 

@@ -28,4 +28,4 @@ def test_knn_same_as_reference():
             knn_impute_with_argpartition,
             knn_impute_optimistic,
             knn_impute_few_observed):
-        _use_knn_implementation_on_low_rank_data(fn)
+        yield _use_knn_implementation_on_low_rank_data, fn
