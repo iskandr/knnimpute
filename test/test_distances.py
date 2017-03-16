@@ -46,4 +46,4 @@ def test_normalized_distance_faster_than_reference_implementation():
     reference_t = time() - start_t
     print("Fast implementation: %0.2fs, reference implementation: %0.2fs" % (
         fast_t, reference_t))
-    assert reference_t / fast_t > 2, "Expected 2x performance gain"
+    assert reference_t / fast_t > 1.5, "Expected 1.5x performance gain"

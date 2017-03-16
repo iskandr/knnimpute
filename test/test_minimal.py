@@ -6,6 +6,7 @@ from knnimpute import (
     knn_impute_with_argpartition,
     knn_impute_optimistic,
     knn_impute_reference,
+    knn_impute,
 )
 
 def _run_knn_with_two_rows(impute_fn):
@@ -19,5 +20,6 @@ def test_knn_minimal():
             knn_impute_few_observed,
             knn_impute_with_argpartition,
             knn_impute_optimistic,
-            knn_impute_reference):
+            knn_impute_reference,
+            knn_impute):
         yield _run_knn_with_two_rows, fn

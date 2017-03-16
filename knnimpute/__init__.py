@@ -7,7 +7,7 @@ from .optimistic import knn_impute_optimistic
 from .common import knn_initialize
 from .few_observed_entries import knn_impute_few_observed
 from .argpartition import knn_impute_with_argpartition
-
+from .wrapper import knn_impute
 __version__ = "0.1.0"
 
 __all__ = [
@@ -18,4 +18,5 @@ __all__ = [
     "knn_impute_optimistic",
     "knn_impute_few_observed",
     "knn_impute_with_argpartition",
+    "knn_impute",
 ]

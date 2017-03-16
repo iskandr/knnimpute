@@ -3,6 +3,7 @@ from knnimpute import (
     knn_impute_with_argpartition,
     knn_impute_optimistic,
     knn_impute_reference,
+    knn_impute,
 )
 import numpy as np
 from sklearn.datasets import load_iris
@@ -25,5 +26,6 @@ def test_iris():
             knn_impute_few_observed,
             knn_impute_with_argpartition,
             knn_impute_optimistic,
-            knn_impute_reference):
+            knn_impute_reference,
+            knn_impute):
         yield _check_iris_imputation, fn

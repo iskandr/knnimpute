@@ -4,6 +4,7 @@ from knnimpute import (
     knn_impute_with_argpartition,
     knn_impute_optimistic,
     knn_impute_reference,
+    knn_impute,
 )
 
 def _attempt_knn_without_overlapping_entries(impute_fn):
@@ -26,5 +27,6 @@ def test_imputation_with_no_overlapping_samples():
             knn_impute_few_observed,
             knn_impute_with_argpartition,
             knn_impute_optimistic,
-            knn_impute_reference):
+            knn_impute_reference,
+            knn_impute):
         yield _attempt_knn_without_overlapping_entries, fn

@@ -6,6 +6,7 @@ from knnimpute import (
     knn_impute_with_argpartition,
     knn_impute_optimistic,
     knn_impute_reference,
+    knn_impute,
 )
 from low_rank_data import XY_incomplete, missing_mask
 
@@ -27,5 +28,6 @@ def test_knn_same_as_reference():
     for fn in (
             knn_impute_with_argpartition,
             knn_impute_optimistic,
-            knn_impute_few_observed):
+            knn_impute_few_observed,
+            knn_impute):
         yield _use_knn_implementation_on_low_rank_data, fn
